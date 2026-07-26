@@ -1,75 +1,50 @@
-# React + TypeScript + Vite
+# 配信準備BOX
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+配信前の確認や、配信中に使う情報をひとつにまとめて管理できるシンプルなWebアプリです。
 
-Currently, two official plugins are available:
+## アプリを開く
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[配信準備BOXを使う](https://yucady.github.io/haishin-box/)
 
-## React Compiler
+## 主な機能
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 配信準備チェックリスト
+- 配信時間を計測するタイマー
+- よく使う定型文の保存とコピー
+- クイックリンクの登録
+- 自動保存されるメモ
+- データのバックアップと復元
+- PWAとしてPCやスマートフォンにインストール
+- 一度読み込んだ後のオフライン利用
 
-## Expanding the ESLint configuration
+## データについて
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+入力した内容はブラウザの `localStorage` に保存されます。
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- 入力内容を外部サーバーへ送信しません
+- 端末やブラウザごとにデータが分かれます
+- ブラウザのデータを削除すると保存内容も消える場合があります
+- 必要なデータは設定画面からバックアップできます
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 使用技術
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- React
+- TypeScript
+- Vite
+- CSS
+- localStorage
+- PWA / Service Worker
 
+## ローカルでの実行
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 動作確認
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm run lint
+npm run build
 ```
