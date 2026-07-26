@@ -3,7 +3,10 @@ import {
   useState,
   type FormEvent,
 } from 'react'
+import twitterText from 'twitter-text'
+
 import { STORAGE_KEYS } from '../constants/storageKeys'
+import { openXPostComposer } from '../utils/xIntent'
 
 type TextTemplate = {
   id: string
@@ -133,6 +136,27 @@ function TextTemplatePanel() {
     }
   }
 
+  function openTemplateInX(content: string) {
+    const postResult = twitterText.parseTweet(content)
+
+    if (!postResult.valid) {
+      window.alert(
+        'この定型文はXの文字数制限を超えています。',
+      )
+      return
+    }
+
+    const didOpen = openXPostComposer(content)
+
+    if (!didOpen) {
+      window.alert(
+        'ポップアップがブロックされました。ブラウザの設定を確認してください。',
+      )
+    }
+  }
+
+
+
   return (
     <article className="panel">
       <h2>定型文</h2>
@@ -193,20 +217,32 @@ function TextTemplatePanel() {
 
               <p>{template.content}</p>
 
-              <button
-                type="button"
-                onClick={() =>
-                  copyFixedText(
-                    template.id,
-                    template.content,
-                  )
-                }
-                aria-live="polite"
-              >
-                {copiedTemplateId === template.id
-                  ? 'コピーしました'
-                  : 'コピー'}
-              </button>
+                <div className="template-card-actions">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      copyFixedText(
+                        template.id,
+                        template.content,
+                      )
+                    }
+                    aria-live="polite"
+                  >
+                    {copiedTemplateId === template.id
+                      ? 'コピーしました'
+                      : 'コピー'}
+                  </button>
+
+                  <button
+                    className="x-template-button"
+                    type="button"
+                    onClick={() =>
+                      openTemplateInX(template.content)
+                    }
+                  >
+                    Xで投稿画面を開く
+                  </button>
+              </div>
             </div>
           ))
         )}

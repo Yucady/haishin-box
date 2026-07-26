@@ -1,9 +1,10 @@
 import ChecklistPanel from './components/ChecklistPanel'
 import MemoPanel from './components/MemoPanel'
 import QuickLinkPanel from './components/QuickLinkPanel'
+import SettingsPanel from './components/SettingsPanel'
 import TextTemplatePanel from './components/TextTemplatePanel'
 import TimerPanel from './components/TimerPanel'
-import SettingsPanel from './components/SettingsPanel'
+import XPostPanel from './components/XPostPanel'
 import './App.css'
 
 function App() {
@@ -19,13 +20,15 @@ function App() {
         <ChecklistPanel />
 
         <TimerPanel />
-        
+
         <TextTemplatePanel />
 
         <QuickLinkPanel />
 
+        <XPostPanel />
+
         <MemoPanel />
-        
+
         <SettingsPanel />
       </section>
     </main>

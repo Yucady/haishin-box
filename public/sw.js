@@ -1,4 +1,4 @@
-const CACHE_NAME = 'haishin-box-cache-v1'
+const CACHE_NAME = 'haishin-box-cache-v2'
 
 const INDEX_URL = new URL(
   'index.html',
@@ -106,7 +106,9 @@ async function handleNavigationRequest(request) {
   const cache = await caches.open(CACHE_NAME)
 
   try {
-    const networkResponse = await fetch(request)
+    const networkResponse = await fetch(request, {
+      cache: 'reload',
+    })
 
     if (networkResponse.ok) {
       await cache.put(

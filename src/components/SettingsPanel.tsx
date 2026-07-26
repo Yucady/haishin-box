@@ -10,7 +10,7 @@ type BackupFile = {
   app: 'haishin-box'
   version: 1
   exportedAt: string
-  data: Record<string, string | null>
+  data: Partial<Record<string, string | null>>
 }
 
 function isBackupFile(value: unknown): value is BackupFile {
@@ -44,10 +44,19 @@ function isBackupFile(value: unknown): value is BackupFile {
 
   const dataRecord = data as Record<string, unknown>
 
+  const hasKnownStorageKey = ALL_STORAGE_KEYS.some(
+    (key) => key in dataRecord,
+  )
+
+  if (!hasKnownStorageKey) {
+    return false
+  }
+
   return ALL_STORAGE_KEYS.every((key) => {
     const storedValue = dataRecord[key]
 
     return (
+      storedValue === undefined ||
       storedValue === null ||
       typeof storedValue === 'string'
     )
@@ -145,7 +154,10 @@ function SettingsPanel() {
       ALL_STORAGE_KEYS.forEach((key) => {
         const storedValue = parsedFile.data[key]
 
-        if (storedValue === null) {
+        if (
+          storedValue === null ||
+          storedValue === undefined
+        ) {
           localStorage.removeItem(key)
         } else {
           localStorage.setItem(key, storedValue)
