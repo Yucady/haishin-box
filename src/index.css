@@ -7,8 +7,8 @@
     Meiryo,
     sans-serif;
 
-  color: #f5f7ff;
-  background: #0b1020;
+  color: #3b5998;
+  background: #e6f2ff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -20,7 +20,7 @@
 html {
   min-width: 320px;
   min-height: 100%;
-  background: #0b1020;
+  background: #e6f2ff;
 }
 
 body {
@@ -45,6 +45,6 @@ button:focus-visible,
 a:focus-visible,
 textarea:focus-visible,
 input:focus-visible {
-  outline: 3px solid rgba(129, 140, 248, 0.45);
+  outline: 3px solid #ffb6c1;
   outline-offset: 3px;
 }
