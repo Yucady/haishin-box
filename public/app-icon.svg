@@ -1,0 +1,65 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 512 512"
+  role="img"
+  aria-label="配信準備BOX"
+>
+  <defs>
+    <linearGradient
+      id="background"
+      x1="64"
+      y1="64"
+      x2="448"
+      y2="448"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop offset="0" stop-color="#5965d8" />
+      <stop offset="1" stop-color="#0ea5e9" />
+    </linearGradient>
+
+    <radialGradient
+      id="glow"
+      cx="0"
+      cy="0"
+      r="1"
+      gradientTransform="translate(174 138) rotate(45) scale(380)"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stop-color="#ffffff" stop-opacity="0.22" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#background)" />
+  <rect width="512" height="512" fill="url(#glow)" />
+
+  <g
+    fill="none"
+    stroke="#ffffff"
+    stroke-linecap="round"
+  >
+    <path
+      d="M194 194C160 228 160 284 194 318"
+      stroke-width="26"
+    />
+
+    <path
+      d="M318 194C352 228 352 284 318 318"
+      stroke-width="26"
+    />
+
+    <path
+      d="M147 147C87 207 87 305 147 365"
+      stroke-width="24"
+      stroke-opacity="0.86"
+    />
+
+    <path
+      d="M365 147C425 207 425 305 365 365"
+      stroke-width="24"
+      stroke-opacity="0.86"
+    />
+  </g>
+
+  <circle cx="256" cy="256" r="36" fill="#ffffff" />
+</svg>
