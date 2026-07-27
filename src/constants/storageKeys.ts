@@ -2,6 +2,7 @@ export const STORAGE_KEYS = {
   checklist: 'haishin-box-checklist',
   textTemplates: 'haishin-box-templates',
   xPostDraft: 'haishin-box-x-post-draft',
+  streamSession: 'haishin-box-stream-session',
   quickLinks: 'haishin-box-quick-links',
   memo: 'haishin-box-memo',
   memoHeight: 'haishin-box-memo-height',

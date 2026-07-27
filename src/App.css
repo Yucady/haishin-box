@@ -50,7 +50,21 @@
 
 .dashboard {
   display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 20px;
+}
+
+.dashboard-row {
+  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 20px;
+}
+
+.dashboard-column {
+  display: grid;
+  align-content: start;
   gap: 20px;
 }
 
@@ -163,6 +177,26 @@ button:hover {
 button:active {
   transform: translateY(1px);
   box-shadow: 1px 1px 0px #ffb6c1;
+}
+
+.stream-status-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stream-status-button.active {
+  border-color: #ff8fa3;
+  color: #ffffff;
+  background: #ff9aa2;
+  box-shadow: 2px 2px 0 #ff7f91;
+}
+
+.stream-status-button.active:hover {
+  border-color: #ff7f91;
+  color: #ffffff;
+  background: #ff8fa3;
+  box-shadow: 3px 3px 0 #ff7f91;
 }
 
 .delete-button {
@@ -571,6 +605,226 @@ textarea::placeholder {
   background: #e8f5e9;
 }
 
+.stream-session-form {
+  display: grid;
+  gap: 10px;
+}
+
+.panel .stream-session-field {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+
+.stream-session-field > span {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.stream-session-field input {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 2px solid #c8d6e5;
+  border-radius: 10px;
+  color: #2c3e50;
+  background: #ffffff;
+  font: inherit;
+}
+
+.stream-session-field input:focus {
+  border-color: #7bb7e5;
+  outline: 3px solid rgba(123, 183, 229, 0.2);
+}
+
+.stream-session-field input::placeholder {
+  color: #a0a8b9;
+}
+
+.stream-status-field {
+  margin-top: 16px;
+}
+
+.stream-status-field > .stream-session-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.stream-session-reset-button {
+  margin-top: 14px;
+}
+
+.stream-countdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 14px;
+  padding: 13px 14px;
+  border: 2px solid #b9d8f5;
+  border-radius: 12px;
+  color: #4b6cb7;
+  background: #eef7ff;
+}
+
+.stream-countdown span {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.stream-countdown strong {
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.stream-countdown.started {
+  border-color: #ffb6c1;
+  color: #c85a7c;
+  background: #fff0f3;
+}
+
+.stream-notification-settings {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 14px;
+  border: 2px solid #d0e1f9;
+  border-radius: 12px;
+  background: rgba(240, 248, 255, 0.7);
+}
+
+.stream-notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.stream-session-label {
+  color: #4b6cb7;
+  font-weight: 700;
+}
+
+.notification-permission-button {
+  min-height: 38px;
+  padding: 8px 12px;
+}
+
+.stream-notification-settings .notification-enabled-toggle,
+.stream-notification-settings .notification-minute-option {
+  margin: 0;
+}
+
+.notification-minute-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.stream-notification-settings .notification-minute-option {
+  flex: 1 1 90px;
+  justify-content: center;
+}
+
+.notification-message {
+  margin: 0;
+  color: #c85a7c;
+  font-size: 0.9rem;
+}
+
+.stream-notification-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.notification-test-button {
+  min-height: 38px;
+  padding: 8px 12px;
+  border-color: #ffb6c1;
+  color: #c85a7c;
+  background: #fff0f3;
+  box-shadow: 2px 2px 0 #ffb6c1;
+}
+
+.stream-session-field input[aria-invalid="true"] {
+  border-color: #ff8f9c;
+  background: #fff5f6;
+}
+
+.stream-field-error {
+  margin: -4px 0 12px;
+  color: #d45d79;
+  font-size: 0.9rem;
+}
+
+.stream-status-warning {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border: 1px solid #f2c36b;
+  border-radius: 10px;
+  color: #8a6419;
+  background: #fff9e8;
+  font-size: 0.9rem;
+}
+
+.template-variable-guide {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border: 1px dashed #b9d8f5;
+  border-radius: 11px;
+  color: #5f7598;
+  background: #f5faff;
+  font-size: 0.85rem;
+}
+
+.template-variable-guide > span {
+  font-weight: 700;
+}
+
+.template-variable-guide > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.template-variable-guide code {
+  padding: 4px 7px;
+  border-radius: 6px;
+  color: #b84f72;
+  background: #fff0f3;
+  font-family: Consolas, monospace;
+}
+
+.x-post-generate-button {
+  flex-shrink: 0;
+  border-color: #ffb6c1;
+  color: #b84f72;
+  background: #fff0f3;
+  box-shadow: 2px 2px 0 #ffb6c1;
+}
+
+.x-post-generate-button:hover {
+  border-color: #ff8fa3;
+  color: #a83f63;
+  background: #ffe4ea;
+  box-shadow: 3px 3px 0 #ff8fa3;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(75, 108, 183, 0.35);
+  outline-offset: 2px;
+}
+
 @media (max-width: 760px) {
   .app {
     padding: 36px 16px 56px;
@@ -603,11 +857,145 @@ textarea::placeholder {
     margin-left: 0;
   }
 
-    .template-card-actions {
+  .x-post-header {
+    flex-direction: column;
+  }
+
+  .x-post-generate-button {
+    width: 100%;
+  }
+
+  .template-card-actions {
     flex-direction: column;
   }
 
   .template-card-actions button {
     width: 100%;
+  }
+
+  .dashboard-row {
+    grid-template-columns: 1fr;
+  }
+
+  .panel .stream-session-field {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .stream-session-field > span {
+    white-space: normal;
+  }
+
+  .stream-notification-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .stream-notification-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .stream-notification-actions button {
+    flex: 1;
+  }
+
+  .notification-minute-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .stream-notification-settings .notification-minute-option {
+    min-width: 0;
+    padding-inline: 8px;
+  }
+
+  .memo-header {
+    flex-wrap: wrap;
+  }
+
+  .memo-footer {
+    flex-wrap: wrap;
+  }
+
+  .settings-actions {
+    flex-direction: column;
+  }
+
+  .settings-actions button {
+    width: 100%;
+  }
+
+  input,
+  textarea,
+  button {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding-inline: 12px;
+  }
+
+  .panel {
+    padding: 16px;
+    border-radius: 15px;
+  }
+
+  .app-header {
+    margin-bottom: 24px;
+  }
+
+  .app-header h1 {
+    font-size: 2.2rem;
+  }
+
+  .stream-countdown {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .stream-countdown strong {
+    font-size: 1.1rem;
+  }
+
+  .checklist-form {
+    grid-template-columns: 1fr;
+  }
+
+  .checklist-form button {
+    width: 100%;
+  }
+
+  .notification-minute-options {
+    grid-template-columns: 1fr;
+  }
+
+  .stream-status-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .stream-status-button {
+    min-width: 0;
+    padding-inline: 8px;
+  }
+
+  .memo-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .memo-footer button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button,
+  a {
+    transition: none;
   }
 }

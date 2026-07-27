@@ -4,14 +4,24 @@ import {
   type FormEvent,
 } from 'react'
 import twitterText from 'twitter-text'
-
 import { STORAGE_KEYS } from '../constants/storageKeys'
+import type { StreamSession } from '../types/streamSession'
+import {
+  getMissingTemplateVariables,
+  replaceTemplateVariables,
+  TEMPLATE_VARIABLE_LABELS,
+  TEMPLATE_VARIABLES,
+} from '../utils/templateVariables'
 import { openXPostComposer } from '../utils/xIntent'
 
 type TextTemplate = {
   id: string
   title: string
   content: string
+}
+
+type TextTemplatePanelProps = {
+  streamSession: StreamSession
 }
 
 const initialTextTemplates: TextTemplate[] = [
@@ -51,7 +61,9 @@ function loadTextTemplates(): TextTemplate[] {
   }
 }
 
-function TextTemplatePanel() {
+function TextTemplatePanel({
+  streamSession,
+}: TextTemplatePanelProps) {
   const [textTemplates, setTextTemplates] =
     useState<TextTemplate[]>(loadTextTemplates)
 
@@ -113,12 +125,46 @@ function TextTemplatePanel() {
     )
   }
 
+  function resolveTemplateContent(
+    content: string,
+  ): string | null {
+    const missingVariables = getMissingTemplateVariables(
+      content,
+      streamSession,
+    )
+
+    if (missingVariables.length > 0) {
+      const missingLabels = missingVariables
+        .map(
+          (variable) =>
+            TEMPLATE_VARIABLE_LABELS[variable],
+        )
+        .join('、')
+
+      const shouldContinue = window.confirm(
+        `次の配信情報が入力されていません：${missingLabels}\n空欄のまま続けますか？`,
+      )
+
+      if (!shouldContinue) {
+        return null
+      }
+    }
+
+    return replaceTemplateVariables(content, streamSession)
+  }
+
   async function copyFixedText(
     id: string,
     content: string,
   ) {
+    const resolvedContent = resolveTemplateContent(content)
+
+    if (resolvedContent === null) {
+      return
+    }
+
     try {
-      await navigator.clipboard.writeText(content)
+      await navigator.clipboard.writeText(resolvedContent)
       setCopiedTemplateId(id)
 
       window.setTimeout(() => {
@@ -137,16 +183,22 @@ function TextTemplatePanel() {
   }
 
   function openTemplateInX(content: string) {
-    const postResult = twitterText.parseTweet(content)
+    const resolvedContent = resolveTemplateContent(content)
+
+    if (resolvedContent === null) {
+      return
+    }
+
+    const postResult = twitterText.parseTweet(resolvedContent)
 
     if (!postResult.valid) {
       window.alert(
-        'この定型文はXの文字数制限を超えています。',
+        '変換後の定型文はXの文字数制限を超えています。',
       )
       return
     }
 
-    const didOpen = openXPostComposer(content)
+    const didOpen = openXPostComposer(resolvedContent)
 
     if (!didOpen) {
       window.alert(
@@ -158,7 +210,7 @@ function TextTemplatePanel() {
 
 
   return (
-    <article className="panel">
+    <article className="panel text-template-panel">
       <h2>定型文</h2>
 
       <form
@@ -185,6 +237,21 @@ function TextTemplatePanel() {
           maxLength={300}
           aria-label="定型文の内容"
         />
+
+        <div className="template-variable-guide">
+          <span>使用できる変数</span>
+
+          <div>
+            {TEMPLATE_VARIABLES.map((variable) => (
+              <code
+                key={variable}
+                title={TEMPLATE_VARIABLE_LABELS[variable]}
+              >
+                {`{${variable}}`}
+              </code>
+            ))}
+          </div>
+        </div>
 
         <button type="submit">定型文を追加</button>
       </form>

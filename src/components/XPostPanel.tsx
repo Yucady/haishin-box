@@ -2,11 +2,17 @@ import { useEffect, useState } from 'react'
 import twitterText from 'twitter-text'
 
 import { STORAGE_KEYS } from '../constants/storageKeys'
+import type { StreamSession } from '../types/streamSession'
+import { createStreamAnnouncement } from '../utils/templateVariables'
+import { getStreamUrlError } from '../utils/streamSessionValidation'
 import { openXPostComposer } from '../utils/xIntent'
 
 type StatusMessage = {
   type: 'success' | 'error'
   text: string
+}
+type XPostPanelProps = {
+  streamSession: StreamSession
 }
 
 function loadXPostDraft() {
@@ -25,7 +31,9 @@ function loadXPostDraft() {
   }
 }
 
-function XPostPanel() {
+function XPostPanel({
+  streamSession,
+}: XPostPanelProps) {
   const [postText, setPostText] = useState(
     loadXPostDraft,
   )
@@ -56,6 +64,55 @@ function XPostPanel() {
       )
     }
   }, [postText])
+
+  function createPostFromStreamSession() {
+    const hasStreamInformation = [
+      streamSession.title,
+      streamSession.scheduledAt,
+      streamSession.streamUrl,
+      streamSession.hashtags,
+    ].some((value) => value.trim() !== '')
+
+    if (!hasStreamInformation) {
+      setStatusMessage({
+        type: 'error',
+        text: '先に「今日の配信」を入力してください。',
+      })
+      return
+    }
+
+    const streamUrlError = getStreamUrlError(
+      streamSession.streamUrl,
+    )
+
+    if (streamUrlError) {
+      setStatusMessage({
+        type: 'error',
+        text: streamUrlError,
+      })
+      return
+    }
+
+    const generatedText =
+      createStreamAnnouncement(streamSession)
+
+    if (!isEmpty && postText !== generatedText) {
+      const shouldReplace = window.confirm(
+        '現在のX投稿下書きを、今日の配信情報で置き換えますか？',
+      )
+
+      if (!shouldReplace) {
+        return
+      }
+    }
+
+    setPostText(generatedText)
+
+    setStatusMessage({
+      type: 'success',
+      text: '今日の配信情報から投稿下書きを作成しました。',
+    })
+  }
 
   async function copyPostText() {
     if (isEmpty) {
@@ -135,6 +192,14 @@ function XPostPanel() {
             入力内容はこの端末に自動保存されます。
           </p>
         </div>
+
+        <button
+          className="x-post-generate-button"
+          type="button"
+          onClick={createPostFromStreamSession}
+        >
+          配信情報から作成
+        </button>
       </div>
 
       <textarea
