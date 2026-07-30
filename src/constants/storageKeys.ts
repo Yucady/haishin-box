@@ -3,6 +3,7 @@ export const STORAGE_KEYS = {
   textTemplates: 'haishin-box-templates',
   xPostDraft: 'haishin-box-x-post-draft',
   streamSession: 'haishin-box-stream-session',
+  streamPresets: 'haishin-box-stream-presets',
   quickLinks: 'haishin-box-quick-links',
   memo: 'haishin-box-memo',
   memoHeight: 'haishin-box-memo-height',

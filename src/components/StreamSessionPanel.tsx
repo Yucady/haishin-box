@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 
 import useStreamNotifications from '../hooks/useStreamNotifications'
 import type { StreamSession } from '../types/streamSession'
+import type { StreamPreset } from '../types/streamPreset'
 import { calculateCountdown } from '../utils/countdown'
+import { applyStreamPreset } from '../utils/streamPresets'
 import {
   getStreamUrlError,
   hasScheduledTimePassed,
@@ -10,6 +12,7 @@ import {
 import StreamInfoForm from './stream-session/StreamInfoForm'
 import StreamNotificationSettings from './stream-session/StreamNotificationSettings'
 import StreamStatusControl from './stream-session/StreamStatusControl'
+import StreamPresetManager from './stream-session/StreamPresetManager'
 
 type StreamSessionPanelProps = {
   session: StreamSession
@@ -89,6 +92,15 @@ function StreamSessionPanel({
     })
   }
 
+  function handleApplyPreset(preset: StreamPreset) {
+    setCurrentTime(Date.now())
+    clearPendingNotifications()
+
+    onChange(
+      applyStreamPreset(session, preset),
+    )
+  }
+
   function handleReset() {
     clearPendingNotifications()
     onReset()
@@ -107,6 +119,11 @@ function StreamSessionPanel({
         streamUrlError={streamUrlError}
         onFieldChange={updateField}
         onScheduledAtChange={handleScheduledAtChange}
+      />
+
+      <StreamPresetManager
+        session={session}
+        onApply={handleApplyPreset}
       />
 
       <StreamStatusControl
