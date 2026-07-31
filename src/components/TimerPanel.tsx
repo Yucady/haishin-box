@@ -1,73 +1,22 @@
-import {
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { formatElapsedTime } from '../utils/streamTimer'
 
-function formatTime(totalSeconds: number) {
-  const hours = Math.floor(totalSeconds / 3600)
-
-  const minutes = Math.floor(
-    (totalSeconds % 3600) / 60,
-  )
-
-  const seconds = totalSeconds % 60
-
-  return [hours, minutes, seconds]
-    .map((value) => String(value).padStart(2, '0'))
-    .join(':')
+type TimerPanelProps = {
+  elapsedSeconds: number
+  isRunning: boolean
+  onStart: () => void
+  onPause: () => void
+  onReset: () => void
 }
 
-function TimerPanel() {
-  const [elapsedSeconds, setElapsedSeconds] = useState(0)
-  const [isRunning, setIsRunning] = useState(false)
-
-  const startTimeRef = useRef<number | null>(null)
-
-  useEffect(() => {
-    if (!isRunning) {
-      return
-    }
-
-    const intervalId = window.setInterval(() => {
-      if (startTimeRef.current === null) {
-        return
-      }
-
-      const elapsedMilliseconds =
-        Date.now() - startTimeRef.current
-
-      setElapsedSeconds(
-        Math.floor(elapsedMilliseconds / 1000),
-      )
-    }, 250)
-
-    return () => {
-      window.clearInterval(intervalId)
-    }
-  }, [isRunning])
-
-  function startTimer() {
-    if (isRunning) {
-      return
-    }
-
-    startTimeRef.current =
-      Date.now() - elapsedSeconds * 1000
-
-    setIsRunning(true)
-  }
-
-  function pauseTimer() {
-    setIsRunning(false)
-    startTimeRef.current = null
-  }
-
-  function resetTimer() {
-    setIsRunning(false)
-    setElapsedSeconds(0)
-    startTimeRef.current = null
-  }
+function TimerPanel({
+  elapsedSeconds,
+  isRunning,
+  onStart,
+  onPause,
+  onReset,
+}: TimerPanelProps) {
+  const formattedTime =
+    formatElapsedTime(elapsedSeconds)
 
   return (
     <article className="panel">
@@ -75,15 +24,15 @@ function TimerPanel() {
 
       <p
         className="timer"
-        aria-label={`経過時間 ${formatTime(elapsedSeconds)}`}
+        aria-label={`経過時間 ${formattedTime}`}
       >
-        {formatTime(elapsedSeconds)}
+        {formattedTime}
       </p>
 
       <div className="timer-buttons">
         <button
           type="button"
-          onClick={startTimer}
+          onClick={onStart}
           disabled={isRunning}
         >
           開始
@@ -91,7 +40,7 @@ function TimerPanel() {
 
         <button
           type="button"
-          onClick={pauseTimer}
+          onClick={onPause}
           disabled={!isRunning}
         >
           一時停止
@@ -99,14 +48,19 @@ function TimerPanel() {
 
         <button
           type="button"
-          onClick={resetTimer}
-          disabled={elapsedSeconds === 0 && !isRunning}
+          onClick={onReset}
+          disabled={
+            elapsedSeconds === 0 && !isRunning
+          }
         >
           リセット
         </button>
       </div>
 
-      <div className="timer-status" aria-live="polite">
+      <div
+        className="timer-status"
+        aria-live="polite"
+      >
         {isRunning ? '計測中' : '停止中'}
       </div>
     </article>

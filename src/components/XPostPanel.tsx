@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import twitterText from 'twitter-text'
-
-import { STORAGE_KEYS } from '../constants/storageKeys'
 import type { StreamSession } from '../types/streamSession'
 import { createStreamAnnouncement } from '../utils/templateVariables'
 import { getStreamUrlError } from '../utils/streamSessionValidation'
@@ -13,30 +11,15 @@ type StatusMessage = {
 }
 type XPostPanelProps = {
   streamSession: StreamSession
-}
-
-function loadXPostDraft() {
-  try {
-    return (
-      localStorage.getItem(STORAGE_KEYS.xPostDraft) ??
-      ''
-    )
-  } catch (error) {
-    console.error(
-      'Xの投稿下書きを読み込めませんでした。',
-      error,
-    )
-
-    return ''
-  }
+  postText: string
+  onPostTextChange: (text: string) => void
 }
 
 function XPostPanel({
   streamSession,
+  postText,
+  onPostTextChange,
 }: XPostPanelProps) {
-  const [postText, setPostText] = useState(
-    loadXPostDraft,
-  )
 
   const [statusMessage, setStatusMessage] =
     useState<StatusMessage | null>(null)
@@ -50,20 +33,6 @@ function XPostPanel({
     !isEmpty && !postResult.valid
 
   const canOpenX = !isEmpty && postResult.valid
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(
-        STORAGE_KEYS.xPostDraft,
-        postText,
-      )
-    } catch (error) {
-      console.error(
-        'Xの投稿下書きを保存できませんでした。',
-        error,
-      )
-    }
-  }, [postText])
 
   function createPostFromStreamSession() {
     const hasStreamInformation = [
@@ -106,7 +75,7 @@ function XPostPanel({
       }
     }
 
-    setPostText(generatedText)
+    onPostTextChange(generatedText)
 
     setStatusMessage({
       type: 'success',
@@ -152,7 +121,7 @@ function XPostPanel({
       return
     }
 
-    setPostText('')
+    onPostTextChange('')
 
     setStatusMessage({
       type: 'success',
@@ -206,7 +175,7 @@ function XPostPanel({
         className="x-post-textarea"
         value={postText}
         onChange={(event) => {
-          setPostText(event.target.value)
+          onPostTextChange(event.target.value)
           setStatusMessage(null)
         }}
         placeholder="Xに投稿するお知らせを書いてください。"

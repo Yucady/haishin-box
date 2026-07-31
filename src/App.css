@@ -955,6 +955,84 @@ textarea:focus-visible {
   outline-offset: 2px;
 }
 
+.stream-start-control {
+  border-color: #ffb6c1;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 240, 243, 0.95),
+      rgba(238, 247, 255, 0.95)
+    );
+  box-shadow:
+    0 10px 25px rgba(160, 190, 220, 0.25),
+    4px 4px 0 #ffd5dc;
+}
+
+.stream-start-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.stream-start-header h2 {
+  margin: 0 0 6px;
+  padding: 0;
+  border-bottom: 0;
+  font-size: 1.25rem;
+}
+
+.stream-start-header p {
+  margin: 0;
+  color: #6a82ab;
+  line-height: 1.6;
+}
+
+.stream-start-button {
+  flex-shrink: 0;
+  min-width: 180px;
+  border-color: #ff7f91;
+  color: #ffffff;
+  background: #ff9aa2;
+  box-shadow: 3px 3px 0 #ff7f91;
+}
+
+.stream-start-button:hover {
+  border-color: #ff667d;
+  color: #ffffff;
+  background: #ff8692;
+  box-shadow: 4px 4px 0 #ff667d;
+}
+
+.stream-start-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.stream-start-badge {
+  padding: 7px 10px;
+  border: 1px solid #c8d6e5;
+  border-radius: 999px;
+  color: #5f7598;
+  background: #f5faff;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.stream-start-badge.ready {
+  border-color: #a5d6a7;
+  color: #2e7d32;
+  background: #e8f5e9;
+}
+
+.stream-start-badge.warning {
+  border-color: #f2c36b;
+  color: #8a6419;
+  background: #fff9e8;
+}
+
 @media (max-width: 760px) {
   .app {
     padding: 36px 16px 56px;
@@ -1069,6 +1147,24 @@ textarea:focus-visible {
   .stream-preset-form button {
     width: 100%;
   }
+
+  .stream-start-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .stream-start-button {
+    width: 100%;
+  }
+
+  .stream-start-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stream-start-badge {
+    text-align: center;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1137,6 +1233,10 @@ textarea:focus-visible {
 
   .stream-preset-card-header .delete-button {
     width: 100%;
+  }
+
+  .stream-start-summary {
+    grid-template-columns: 1fr;
   }
 }
 

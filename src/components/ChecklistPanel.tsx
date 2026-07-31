@@ -1,132 +1,37 @@
 import {
-  useEffect,
   useState,
   type FormEvent,
 } from 'react'
-import { STORAGE_KEYS } from '../constants/storageKeys'
 
-type ChecklistItem = {
-  id: string
-  text: string
-  completed: boolean
+import type { ChecklistItem } from '../types/checklist'
+
+type ChecklistPanelProps = {
+  checklist: readonly ChecklistItem[]
+  onAddItem: (text: string) => boolean
+  onToggleItem: (id: string) => void
+  onReset: () => void
+  onDeleteItem: (id: string) => void
 }
 
-const initialChecklist: ChecklistItem[] = [
-  {
-    id: 'microphone',
-    text: 'マイク確認',
-    completed: false,
-  },
-  {
-    id: 'obs',
-    text: 'OBS起動',
-    completed: false,
-  },
-  {
-    id: 'title',
-    text: '配信タイトル確認',
-    completed: false,
-  },
-  {
-    id: 'comments',
-    text: 'コメント欄確認',
-    completed: false,
-  },
-]
-
-function loadChecklist(): ChecklistItem[] {
-  const savedChecklist = localStorage.getItem(
-    STORAGE_KEYS.checklist,
-  )
-
-  if (savedChecklist === null) {
-    return initialChecklist
-  }
-
-  try {
-    const parsedChecklist = JSON.parse(savedChecklist)
-
-    if (!Array.isArray(parsedChecklist)) {
-      return initialChecklist
-    }
-
-    return parsedChecklist as ChecklistItem[]
-  } catch {
-    return initialChecklist
-  }
-}
-
-function ChecklistPanel() {
-  const [checklist, setChecklist] =
-    useState<ChecklistItem[]>(loadChecklist)
-
+function ChecklistPanel({
+  checklist,
+  onAddItem,
+  onToggleItem,
+  onReset,
+  onDeleteItem,
+}: ChecklistPanelProps) {
   const [newItemText, setNewItemText] = useState('')
 
-  useEffect(() => {
-    try {
-      localStorage.setItem(
-        STORAGE_KEYS.checklist,
-        JSON.stringify(checklist),
-      )
-    } catch (error) {
-      console.error(
-        'チェックリストを保存できませんでした。',
-        error,
-      )
-    }
-  }, [checklist])
-
-  function addChecklistItem(
+  function handleSubmit(
     event: FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault()
 
-    const trimmedText = newItemText.trim()
+    const wasAdded = onAddItem(newItemText)
 
-    if (trimmedText === '') {
-      return
+    if (wasAdded) {
+      setNewItemText('')
     }
-
-    const newItem: ChecklistItem = {
-      id: crypto.randomUUID(),
-      text: trimmedText,
-      completed: false,
-    }
-
-    setChecklist((currentChecklist) => [
-      ...currentChecklist,
-      newItem,
-    ])
-
-    setNewItemText('')
-  }
-
-  function toggleChecklist(id: string) {
-    setChecklist((currentChecklist) =>
-      currentChecklist.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              completed: !item.completed,
-            }
-          : item,
-      ),
-    )
-  }
-
-  function resetChecklist() {
-    setChecklist((currentChecklist) =>
-      currentChecklist.map((item) => ({
-        ...item,
-        completed: false,
-      })),
-    )
-  }
-
-  function deleteChecklistItem(id: string) {
-    setChecklist((currentChecklist) =>
-      currentChecklist.filter((item) => item.id !== id),
-    )
   }
 
   return (
@@ -135,7 +40,7 @@ function ChecklistPanel() {
 
       <form
         className="checklist-form"
-        onSubmit={addChecklistItem}
+        onSubmit={handleSubmit}
       >
         <input
           type="text"
@@ -154,12 +59,14 @@ function ChecklistPanel() {
       {checklist.map((item) => (
         <div className="checklist-row" key={item.id}>
           <label
-            className={item.completed ? 'completed' : ''}
+            className={
+              item.completed ? 'completed' : ''
+            }
           >
             <input
               type="checkbox"
               checked={item.completed}
-              onChange={() => toggleChecklist(item.id)}
+              onChange={() => onToggleItem(item.id)}
             />
 
             <span>{item.text}</span>
@@ -168,7 +75,7 @@ function ChecklistPanel() {
           <button
             className="delete-button"
             type="button"
-            onClick={() => deleteChecklistItem(item.id)}
+            onClick={() => onDeleteItem(item.id)}
             aria-label={`${item.text}を削除`}
           >
             削除
@@ -176,7 +83,7 @@ function ChecklistPanel() {
         </div>
       ))}
 
-      <button type="button" onClick={resetChecklist}>
+      <button type="button" onClick={onReset}>
         チェックをリセット
       </button>
     </article>

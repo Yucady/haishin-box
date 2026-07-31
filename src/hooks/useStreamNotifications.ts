@@ -35,6 +35,7 @@ function useStreamNotifications({
 
   useEffect(() => {
     if (
+      session.status !== 'preparing' ||
       permission !== 'granted' ||
       !session.notificationsEnabled ||
       !countdown ||

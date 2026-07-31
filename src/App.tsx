@@ -1,46 +1,79 @@
 import { useEffect, useState } from 'react'
+
 import ChecklistPanel from './components/ChecklistPanel'
 import MemoPanel from './components/MemoPanel'
 import QuickLinkPanel from './components/QuickLinkPanel'
 import SettingsPanel from './components/SettingsPanel'
 import StreamSessionPanel from './components/StreamSessionPanel'
+import StreamStartControl from './components/StreamStartControl'
 import TextTemplatePanel from './components/TextTemplatePanel'
 import TimerPanel from './components/TimerPanel'
 import XPostPanel from './components/XPostPanel'
 import { STORAGE_KEYS } from './constants/storageKeys'
-import './App.css'
+import useChecklist from './hooks/useChecklist'
+import useStreamTimer from './hooks/useStreamTimer'
+import useXPostDraft from './hooks/useXPostDraft'
 import {
   createEmptyStreamSession,
   type StreamSession,
 } from './types/streamSession'
+import { createStreamStartPlan } from './utils/streamStart'
+import { getStreamUrlError } from './utils/streamSessionValidation'
+import './App.css'
 
 function App() {
-  const [streamSession, setStreamSession] = useState<StreamSession>(() => {
-    const savedSession = localStorage.getItem(STORAGE_KEYS.streamSession)
+  const {
+    checklist,
+    incompleteChecklistItems,
+    addChecklistItem,
+    toggleChecklistItem,
+    resetChecklist,
+    deleteChecklistItem,
+  } = useChecklist()
 
-    if (!savedSession) {
-      return createEmptyStreamSession()
-    }
+  const {
+    elapsedSeconds,
+    isRunning: isTimerRunning,
+    startTimer,
+    pauseTimer,
+    resetTimer,
+  } = useStreamTimer()
 
-    try {
-      const parsedSession: unknown = JSON.parse(savedSession)
+  const {
+    xPostDraft,
+    setXPostDraft,
+  } = useXPostDraft()
 
-      if (
-        !parsedSession ||
-        typeof parsedSession !== 'object' ||
-        Array.isArray(parsedSession)
-      ) {
+  const [streamSession, setStreamSession] =
+    useState<StreamSession>(() => {
+      const savedSession = localStorage.getItem(
+        STORAGE_KEYS.streamSession,
+      )
+
+      if (!savedSession) {
         return createEmptyStreamSession()
       }
 
-      return {
-        ...createEmptyStreamSession(),
-        ...(parsedSession as Partial<StreamSession>),
+      try {
+        const parsedSession: unknown =
+          JSON.parse(savedSession)
+
+        if (
+          !parsedSession ||
+          typeof parsedSession !== 'object' ||
+          Array.isArray(parsedSession)
+        ) {
+          return createEmptyStreamSession()
+        }
+
+        return {
+          ...createEmptyStreamSession(),
+          ...(parsedSession as Partial<StreamSession>),
+        }
+      } catch {
+        return createEmptyStreamSession()
       }
-    } catch {
-      return createEmptyStreamSession()
-    }
-  })
+    })
 
   useEffect(() => {
     localStorage.setItem(
@@ -49,8 +82,56 @@ function App() {
     )
   }, [streamSession])
 
-  const resetStreamSession = () => {
+  function resetStreamSession() {
     setStreamSession(createEmptyStreamSession())
+  }
+
+  function startStream() {
+    const streamUrlError = getStreamUrlError(
+      streamSession.streamUrl,
+    )
+
+    if (streamUrlError) {
+      window.alert(
+        `配信URLを確認してください。\n${streamUrlError}`,
+      )
+      return
+    }
+
+    if (incompleteChecklistItems.length > 0) {
+      const incompleteList =
+        incompleteChecklistItems
+          .map((item) => `・${item.text}`)
+          .join('\n')
+
+      const shouldContinue = window.confirm(
+        `未完了の準備項目があります。\n\n${incompleteList}\n\nこのまま配信を開始しますか？`,
+      )
+
+      if (!shouldContinue) {
+        return
+      }
+    }
+
+    const startPlan =
+      createStreamStartPlan(streamSession)
+
+    if (
+      xPostDraft.trim() !== '' &&
+      xPostDraft !== startPlan.xPostDraft
+    ) {
+      const shouldReplaceDraft = window.confirm(
+        '現在のX投稿下書きを、配信開始のお知らせで置き換えますか？',
+      )
+
+      if (!shouldReplaceDraft) {
+        return
+      }
+    }
+
+    setStreamSession(startPlan.streamSession)
+    startTimer()
+    setXPostDraft(startPlan.xPostDraft)
   }
 
   return (
@@ -62,6 +143,19 @@ function App() {
       </header>
 
       <section className="dashboard">
+        <StreamStartControl
+          checklistTotal={checklist.length}
+          incompleteChecklistCount={
+            incompleteChecklistItems.length
+          }
+          isTimerRunning={isTimerRunning}
+          isLive={streamSession.status === 'live'}
+          hasXPostDraft={
+            xPostDraft.trim() !== ''
+          }
+          onStart={startStream}
+        />
+
         <div className="dashboard-row">
           <StreamSessionPanel
             session={streamSession}
@@ -69,12 +163,24 @@ function App() {
             onReset={resetStreamSession}
           />
 
-          <ChecklistPanel />
+          <ChecklistPanel
+            checklist={checklist}
+            onAddItem={addChecklistItem}
+            onToggleItem={toggleChecklistItem}
+            onReset={resetChecklist}
+            onDeleteItem={deleteChecklistItem}
+          />
         </div>
 
         <div className="dashboard-row">
           <div className="dashboard-column">
-            <TimerPanel />
+            <TimerPanel
+              elapsedSeconds={elapsedSeconds}
+              isRunning={isTimerRunning}
+              onStart={startTimer}
+              onPause={pauseTimer}
+              onReset={resetTimer}
+            />
 
             <QuickLinkPanel />
           </div>
@@ -84,7 +190,11 @@ function App() {
           />
         </div>
 
-        <XPostPanel streamSession={streamSession} />
+        <XPostPanel
+          streamSession={streamSession}
+          postText={xPostDraft}
+          onPostTextChange={setXPostDraft}
+        />
 
         <MemoPanel />
 
