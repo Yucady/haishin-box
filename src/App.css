@@ -20,17 +20,51 @@
 }
 
 .app-header {
+  position: relative;
   margin-bottom: 32px;
   text-align: center;
 }
 
-.app-header > p:first-child {
+.app-header-description {
   margin: 0 0 8px;
   color: #7b9acc;
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.app-help-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 7px 12px;
+  border: 1px solid #b8d2ee;
+  border-radius: 999px;
+  color: #4b6cb7;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 2px 0 #c6dbee;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.app-help-button:hover {
+  background: #ffffff;
+}
+
+.app-help-button span {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #6d91d5;
+  font-size: 0.8rem;
 }
 
 .app-header h1 {
@@ -1415,6 +1449,13 @@ textarea:focus-visible {
 
   .focus-mode-timer {
     font-size: clamp(2.5rem, 15vw, 4rem);
+  }
+
+  .app-help-button {
+    position: static;
+    display: flex;
+    width: max-content;
+    margin: 18px auto 0;
   }
 }
 

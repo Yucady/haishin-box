@@ -10,10 +10,12 @@ import StreamStartControl from './components/StreamStartControl'
 import TextTemplatePanel from './components/TextTemplatePanel'
 import TimerPanel from './components/TimerPanel'
 import XPostPanel from './components/XPostPanel'
+import OnboardingDialog from './components/OnboardingDialog'
 import { STORAGE_KEYS } from './constants/storageKeys'
 import useChecklist from './hooks/useChecklist'
 import useStreamTimer from './hooks/useStreamTimer'
 import useXPostDraft from './hooks/useXPostDraft'
+import { useOnboarding } from './hooks/useOnboarding'
 import {
   createEmptyStreamSession,
   type StreamSession,
@@ -23,6 +25,12 @@ import { getStreamUrlError } from './utils/streamSessionValidation'
 import './App.css'
 
 function App() {
+  const {
+    isOnboardingOpen,
+    completeOnboarding,
+    openOnboarding,
+  } = useOnboarding()
+
   const {
     checklist,
     incompleteChecklistItems,
@@ -143,21 +151,35 @@ function App() {
     setXPostDraft(startPlan.xPostDraft)
   }
 
-  return (
-    <main
-      className={
-        isFocusModeActive
-          ? 'app focus-mode-active'
-          : 'app'
-      }
-    >
+    return (
+      <>
+        <main
+          className={
+            isFocusModeActive
+              ? 'app focus-mode-active'
+              : 'app'
+          }
+          aria-hidden={
+            isOnboardingOpen ? true : undefined
+          }
+        >
       {!isFocusModeActive && (
         <header className="app-header">
           <p>配信者向けシンプルツール</p>
           <h1>配信準備BOX</h1>
-          <p>
+          <p className="app-header-description">
             配信前の準備を一か所で確認できます。
           </p>
+
+          <button
+            className="app-help-button"
+            type="button"
+            onClick={openOnboarding}
+            aria-haspopup="dialog"
+          >
+            <span aria-hidden="true">?</span>
+            使い方
+          </button>
         </header>
       )}
 
@@ -255,7 +277,13 @@ function App() {
           </>
         )}
       </section>
-    </main>
+      </main>
+
+      <OnboardingDialog
+        isOpen={isOnboardingOpen}
+        onComplete={completeOnboarding}
+      />
+    </>
   )
 }
 
