@@ -1,4 +1,13 @@
-const CACHE_NAME = 'haishin-box-cache-v2'
+const SERVICE_WORKER_URL = new URL(
+  self.location.href,
+)
+
+const CACHE_VERSION =
+  SERVICE_WORKER_URL.searchParams.get('v') ??
+  'legacy'
+
+const CACHE_NAME =
+  `haishin-box-cache-${CACHE_VERSION}`
 
 const INDEX_URL = new URL(
   'index.html',
@@ -91,6 +100,15 @@ self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(request.url)
 
   if (requestUrl.origin !== self.location.origin) {
+    return
+  }
+
+  if (
+    requestUrl.searchParams.has(
+      'pwa-update-check',
+    )
+  ) {
+    event.respondWith(fetch(request))
     return
   }
 

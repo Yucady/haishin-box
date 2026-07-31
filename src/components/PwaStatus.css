@@ -1,0 +1,171 @@
+.pwa-status-stack {
+  position: fixed;
+  right: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
+  z-index: 900;
+  display: grid;
+  width: min(380px, calc(100vw - 40px));
+  gap: 10px;
+  pointer-events: none;
+}
+
+.pwa-notice,
+.pwa-result-message {
+  pointer-events: auto;
+  animation: pwa-notice-in 180ms ease-out;
+}
+
+.pwa-notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 15px;
+  border: 1px solid #c6dbef;
+  border-radius: 16px;
+  color: #4a607e;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow:
+    0 12px 35px rgba(50, 75, 112, 0.2),
+    3px 3px 0 rgba(186, 218, 238, 0.55);
+  backdrop-filter: blur(10px);
+}
+
+.pwa-notice > div:first-of-type {
+  min-width: 0;
+  flex: 1 1 210px;
+}
+
+.pwa-notice strong {
+  display: block;
+  color: #4167a6;
+  font-size: 0.9rem;
+}
+
+.pwa-notice p {
+  margin: 4px 0 0;
+  color: #71829a;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.pwa-notice.offline {
+  flex-wrap: nowrap;
+  border-color: #efca87;
+  background: rgba(255, 250, 235, 0.97);
+}
+
+.pwa-notice.offline strong {
+  color: #a96d18;
+}
+
+.pwa-notice-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #e7a63e;
+  box-shadow: 0 0 0 4px rgba(231, 166, 62, 0.16);
+}
+
+.pwa-notice.update {
+  border-color: #9fc4ea;
+  background: rgba(242, 249, 255, 0.97);
+}
+
+.pwa-notice.install {
+  border-color: #f0b5c2;
+  background: rgba(255, 246, 249, 0.97);
+}
+
+.pwa-notice.install strong {
+  color: #bd5971;
+}
+
+.pwa-notice button {
+  min-height: 36px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.pwa-notice.update > button {
+  color: #ffffff;
+  background: #6088ce;
+}
+
+.pwa-notice-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 7px;
+}
+
+.pwa-notice.install
+  .pwa-notice-actions
+  button:first-child {
+  color: #ffffff;
+  background: #f27f98;
+}
+
+.pwa-notice .pwa-dismiss-button {
+  border-color: #d4ddea;
+  color: #6e7d93;
+  background: #ffffff;
+}
+
+.pwa-notice .pwa-dismiss-button:hover {
+  background: #f3f6fa;
+}
+
+.pwa-result-message {
+  padding: 11px 14px;
+  border: 1px solid #bdd9ca;
+  border-radius: 13px;
+  color: #47745a;
+  background: rgba(244, 255, 248, 0.97);
+  box-shadow: 0 8px 24px rgba(55, 93, 72, 0.15);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+@keyframes pwa-notice-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 560px) {
+  .pwa-status-stack {
+    right: 12px;
+    bottom: calc(
+      12px + env(safe-area-inset-bottom)
+    );
+    width: calc(100vw - 24px);
+  }
+
+  .pwa-notice {
+    padding: 13px;
+  }
+
+  .pwa-notice-actions {
+    width: 100%;
+  }
+
+  .pwa-notice-actions button {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pwa-notice,
+  .pwa-result-message {
+    animation: none;
+  }
+}

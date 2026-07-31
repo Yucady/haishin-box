@@ -11,11 +11,13 @@ import TextTemplatePanel from './components/TextTemplatePanel'
 import TimerPanel from './components/TimerPanel'
 import XPostPanel from './components/XPostPanel'
 import OnboardingDialog from './components/OnboardingDialog'
+import PwaStatus from './components/PwaStatus'
 import { STORAGE_KEYS } from './constants/storageKeys'
 import useChecklist from './hooks/useChecklist'
 import useStreamTimer from './hooks/useStreamTimer'
 import useXPostDraft from './hooks/useXPostDraft'
 import { useOnboarding } from './hooks/useOnboarding'
+import usePwaExperience from './hooks/usePwaExperience'
 import {
   createEmptyStreamSession,
   type StreamSession,
@@ -30,6 +32,13 @@ function App() {
     completeOnboarding,
     openOnboarding,
   } = useOnboarding()
+  const {
+    isOnline,
+    canInstall,
+    isUpdateAvailable,
+    installApp,
+    reloadForUpdate,
+  } = usePwaExperience()
 
   const {
     checklist,
@@ -277,6 +286,15 @@ function App() {
           </>
         )}
       </section>
+
+      <PwaStatus
+        isOnline={isOnline}
+        canInstall={canInstall}
+        isUpdateAvailable={isUpdateAvailable}
+        onInstall={installApp}
+        onReloadForUpdate={reloadForUpdate}
+      />
+
       </main>
 
       <OnboardingDialog
