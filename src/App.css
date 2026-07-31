@@ -220,33 +220,33 @@ button:active {
 }
 
 .stream-status-button.active {
-  border-color: #ff8fa3;
+  border-color: #a92f49;
   color: #ffffff;
-  background: #ff9aa2;
-  box-shadow: 2px 2px 0 #ff7f91;
+  background: #c73e5a;
+  box-shadow: 2px 2px 0 #a92f49;
 }
 
 .stream-status-button.active:hover {
-  border-color: #ff7f91;
+  border-color: #92263d;
   color: #ffffff;
-  background: #ff8fa3;
-  box-shadow: 3px 3px 0 #ff7f91;
+  background: #b83250;
+  box-shadow: 3px 3px 0 #92263d;
 }
 
 .delete-button {
   min-width: 60px;
   padding-inline: 12px;
-  border-color: #ffb7b2;
-  color: #e57373;
+  border-color: #d98290;
+  color: #9e344d;
   background: #fff0f3;
-  box-shadow: 2px 2px 0px #ffb7b2;
+  box-shadow: 2px 2px 0 #e6a6af;
 }
 
 .delete-button:hover {
+  border-color: #b94a61;
+  color: #7f263a;
   background: #ffe0e6;
-  border-color: #ff8b94;
-  color: #d32f2f;
-  box-shadow: 3px 3px 0px #ff8b94;
+  box-shadow: 3px 3px 0 #c96c7e;
 }
 
 .template-form {
@@ -422,7 +422,7 @@ button:disabled:hover {
   padding: 10px 16px;
   border: 2px solid #b2ebf2;
   border-radius: 11px;
-  color: #00838f;
+  color: #00616b;
   background: #e0f7fa;
   font-weight: 600;
   text-decoration: none;
@@ -618,16 +618,16 @@ textarea::placeholder {
 }
 
 .danger-button {
-  border-color: #ffb7b2;
-  color: #e57373;
+  border-color: #d98290;
+  color: #9e344d;
   background: #fff0f3;
-  box-shadow: 2px 2px 0px #ffb7b2;
+  box-shadow: 2px 2px 0 #e6a6af;
 }
 
 .danger-button:hover {
+  border-color: #b94a61;
+  color: #7f263a;
   background: #ffe0e6;
-  border-color: #ff8b94;
-  color: #d32f2f;
 }
 
 .settings-status {
@@ -943,7 +943,7 @@ textarea::placeholder {
   padding: 12px;
   border: 1px dashed #b9d8f5;
   border-radius: 11px;
-  color: #5f7598;
+  color: #4b638a;
   background: #f5faff;
   font-size: 0.85rem;
 }
@@ -961,24 +961,24 @@ textarea::placeholder {
 .template-variable-guide code {
   padding: 4px 7px;
   border-radius: 6px;
-  color: #b84f72;
+  color: #923552;
   background: #fff0f3;
   font-family: Consolas, monospace;
 }
 
 .x-post-generate-button {
   flex-shrink: 0;
-  border-color: #ffb6c1;
-  color: #b84f72;
+  border-color: #d9879a;
+  color: #923552;
   background: #fff0f3;
-  box-shadow: 2px 2px 0 #ffb6c1;
+  box-shadow: 2px 2px 0 #e6a6af;
 }
 
 .x-post-generate-button:hover {
-  border-color: #ff8fa3;
-  color: #a83f63;
+  border-color: #b94a61;
+  color: #7f263a;
   background: #ffe4ea;
-  box-shadow: 3px 3px 0 #ff8fa3;
+  box-shadow: 3px 3px 0 #c96c7e;
 }
 
 button:focus-visible,
