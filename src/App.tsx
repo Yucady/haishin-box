@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import ChecklistPanel from './components/ChecklistPanel'
+import FocusModeView from './components/FocusModeView'
 import MemoPanel from './components/MemoPanel'
 import QuickLinkPanel from './components/QuickLinkPanel'
 import SettingsPanel from './components/SettingsPanel'
@@ -44,6 +45,9 @@ function App() {
     setXPostDraft,
   } = useXPostDraft()
 
+  const [isFocusMode, setIsFocusMode] =
+    useState(false)
+
   const [streamSession, setStreamSession] =
     useState<StreamSession>(() => {
       const savedSession = localStorage.getItem(
@@ -75,6 +79,10 @@ function App() {
       }
     })
 
+  const isFocusModeActive =
+    isFocusMode &&
+    streamSession.status === 'live'
+
   useEffect(() => {
     localStorage.setItem(
       STORAGE_KEYS.streamSession,
@@ -83,6 +91,7 @@ function App() {
   }, [streamSession])
 
   function resetStreamSession() {
+    setIsFocusMode(false)
     setStreamSession(createEmptyStreamSession())
   }
 
@@ -135,70 +144,116 @@ function App() {
   }
 
   return (
-    <main className="app">
-      <header className="app-header">
-        <p>配信者向けシンプルツール</p>
-        <h1>配信準備BOX</h1>
-        <p>配信前の準備を一か所で確認できます。</p>
-      </header>
+    <main
+      className={
+        isFocusModeActive
+          ? 'app focus-mode-active'
+          : 'app'
+      }
+    >
+      {!isFocusModeActive && (
+        <header className="app-header">
+          <p>配信者向けシンプルツール</p>
+          <h1>配信準備BOX</h1>
+          <p>
+            配信前の準備を一か所で確認できます。
+          </p>
+        </header>
+      )}
 
       <section className="dashboard">
-        <StreamStartControl
-          checklistTotal={checklist.length}
-          incompleteChecklistCount={
-            incompleteChecklistItems.length
-          }
-          isTimerRunning={isTimerRunning}
-          isLive={streamSession.status === 'live'}
-          hasXPostDraft={
-            xPostDraft.trim() !== ''
-          }
-          onStart={startStream}
-        />
-
-        <div className="dashboard-row">
-          <StreamSessionPanel
-            session={streamSession}
-            onChange={setStreamSession}
-            onReset={resetStreamSession}
-          />
-
-          <ChecklistPanel
+        {isFocusModeActive ? (
+          <FocusModeView
+            streamTitle={streamSession.title}
+            elapsedSeconds={elapsedSeconds}
+            isTimerRunning={isTimerRunning}
             checklist={checklist}
-            onAddItem={addChecklistItem}
-            onToggleItem={toggleChecklistItem}
-            onReset={resetChecklist}
-            onDeleteItem={deleteChecklistItem}
+            incompleteChecklistCount={
+              incompleteChecklistItems.length
+            }
+            onStartTimer={startTimer}
+            onPauseTimer={pauseTimer}
+            onAddChecklistItem={
+              addChecklistItem
+            }
+            onToggleChecklistItem={
+              toggleChecklistItem
+            }
+            onResetChecklist={resetChecklist}
+            onDeleteChecklistItem={
+              deleteChecklistItem
+            }
+            onExit={() => setIsFocusMode(false)}
           />
-        </div>
-
-        <div className="dashboard-row">
-          <div className="dashboard-column">
-            <TimerPanel
-              elapsedSeconds={elapsedSeconds}
-              isRunning={isTimerRunning}
-              onStart={startTimer}
-              onPause={pauseTimer}
-              onReset={resetTimer}
+        ) : (
+          <>
+            <StreamStartControl
+              checklistTotal={checklist.length}
+              incompleteChecklistCount={
+                incompleteChecklistItems.length
+              }
+              isTimerRunning={isTimerRunning}
+              isLive={
+                streamSession.status === 'live'
+              }
+              hasXPostDraft={
+                xPostDraft.trim() !== ''
+              }
+              onStart={startStream}
+              onEnterFocusMode={() =>
+                setIsFocusMode(true)
+              }
             />
 
-            <QuickLinkPanel />
-          </div>
+            <div className="dashboard-row">
+              <StreamSessionPanel
+                session={streamSession}
+                onChange={setStreamSession}
+                onReset={resetStreamSession}
+              />
 
-          <TextTemplatePanel
-            streamSession={streamSession}
-          />
-        </div>
+              <ChecklistPanel
+                checklist={checklist}
+                onAddItem={addChecklistItem}
+                onToggleItem={
+                  toggleChecklistItem
+                }
+                onReset={resetChecklist}
+                onDeleteItem={
+                  deleteChecklistItem
+                }
+              />
+            </div>
 
-        <XPostPanel
-          streamSession={streamSession}
-          postText={xPostDraft}
-          onPostTextChange={setXPostDraft}
-        />
+            <div className="dashboard-row">
+              <div className="dashboard-column">
+                <TimerPanel
+                  elapsedSeconds={elapsedSeconds}
+                  isRunning={isTimerRunning}
+                  onStart={startTimer}
+                  onPause={pauseTimer}
+                  onReset={resetTimer}
+                />
 
-        <MemoPanel />
+                <QuickLinkPanel />
+              </div>
 
-        <SettingsPanel />
+              <TextTemplatePanel
+                streamSession={streamSession}
+              />
+            </div>
+
+            <XPostPanel
+              streamSession={streamSession}
+              postText={xPostDraft}
+              onPostTextChange={setXPostDraft}
+            />
+
+            <MemoPanel />
+
+            <SettingsPanel />
+          </>
+        )}
       </section>
     </main>
   )

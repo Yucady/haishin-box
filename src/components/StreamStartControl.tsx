@@ -5,6 +5,7 @@ type StreamStartControlProps = {
   isLive: boolean
   hasXPostDraft: boolean
   onStart: () => void
+  onEnterFocusMode: () => void
 }
 
 function StreamStartControl({
@@ -14,6 +15,7 @@ function StreamStartControl({
   isLive,
   hasXPostDraft,
   onStart,
+  onEnterFocusMode,
 }: StreamStartControlProps) {
   const completedChecklistCount =
     checklistTotal - incompleteChecklistCount
@@ -36,16 +38,28 @@ function StreamStartControl({
           </p>
         </div>
 
-        <button
-          type="button"
-          className="stream-start-button"
-          onClick={onStart}
-          disabled={isStartComplete}
-        >
-          {isStartComplete
-            ? '配信開始済み'
-            : '配信を開始する'}
-        </button>
+        <div className="stream-start-actions">
+            <button
+                type="button"
+                className="stream-start-button"
+                onClick={onStart}
+                disabled={isStartComplete}
+            >
+                {isStartComplete
+                ? '配信開始済み'
+                : '配信を開始する'}
+            </button>
+
+            {isLive && (
+                <button
+                type="button"
+                className="focus-mode-enter-button"
+                onClick={onEnterFocusMode}
+                >
+                集中モード
+                </button>
+            )}
+        </div>
       </div>
 
       <div
