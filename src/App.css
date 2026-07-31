@@ -1025,17 +1025,17 @@ textarea:focus-visible {
 .stream-start-button {
   flex-shrink: 0;
   min-width: 180px;
-  border-color: #ff7f91;
+  border-color: #a92f49;
   color: #ffffff;
-  background: #ff9aa2;
-  box-shadow: 3px 3px 0 #ff7f91;
+  background: #c73e5a;
+  box-shadow: 3px 3px 0 #a92f49;
 }
 
 .stream-start-button:hover {
-  border-color: #ff667d;
+  border-color: #92263d;
   color: #ffffff;
-  background: #ff8692;
-  box-shadow: 4px 4px 0 #ff667d;
+  background: #b83250;
+  box-shadow: 4px 4px 0 #92263d;
 }
 
 .stream-start-summary {
@@ -1049,7 +1049,7 @@ textarea:focus-visible {
   padding: 7px 10px;
   border: 1px solid #c8d6e5;
   border-radius: 999px;
-  color: #5f7598;
+  color: #4b638a;
   background: #f5faff;
   font-size: 0.82rem;
   font-weight: 700;
