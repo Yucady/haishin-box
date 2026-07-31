@@ -12,6 +12,7 @@ import TimerPanel from './components/TimerPanel'
 import XPostPanel from './components/XPostPanel'
 import OnboardingDialog from './components/OnboardingDialog'
 import PwaStatus from './components/PwaStatus'
+import AppFooter from './components/AppFooter'
 import { STORAGE_KEYS } from './constants/storageKeys'
 import useChecklist from './hooks/useChecklist'
 import useStreamTimer from './hooks/useStreamTimer'
@@ -286,6 +287,8 @@ function App() {
           </>
         )}
       </section>
+
+      {!isFocusModeActive && <AppFooter />}
 
       <PwaStatus
         isOnline={isOnline}

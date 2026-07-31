@@ -1,14 +1,20 @@
 {
+  "id": "./",
   "name": "配信準備BOX",
   "short_name": "配信準備",
-  "description": "配信前の準備、タイマー、定型文、リンク、メモをまとめて管理できるシンプルなツールです。",
+  "description": "配信情報、準備チェック、タイマー、定型文、X告知、メモをひとつにまとめて管理できる配信者向けWebツールです。",
   "lang": "ja",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#0b1020",
-  "theme_color": "#0b1020",
+  "background_color": "#e6f2ff",
+  "theme_color": "#e6f2ff",
+  "categories": [
+    "productivity",
+    "utilities"
+  ],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "./pwa-192x192.png",

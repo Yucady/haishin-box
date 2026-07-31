@@ -1465,3 +1465,44 @@ textarea:focus-visible {
     transition: none;
   }
 }
+
+.app-footer {
+  width: min(100%, 1080px);
+  margin: 30px auto 0;
+  padding: 22px 16px 0;
+  border-top: 1px dashed #bdd5ec;
+  color: #7185a3;
+  text-align: center;
+}
+
+.app-footer p {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.app-footer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: 7px;
+  font-size: 0.76rem;
+}
+
+.app-footer a {
+  color: #5579bd;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.app-footer a:hover {
+  text-decoration: underline;
+}
+
+.app-footer a:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid rgba(85, 121, 189, 0.28);
+  outline-offset: 3px;
+}

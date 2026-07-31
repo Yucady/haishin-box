@@ -6,6 +6,8 @@ import react from '@vitejs/plugin-react'
 
 const buildId = new Date().toISOString()
 
+const appVersion = process.env.npm_package_version ?? '0.0.0'
+
 function injectBuildId(): Plugin {
   return {
     name: 'inject-build-id',
@@ -36,5 +38,6 @@ export default defineConfig({
 
   define: {
     __BUILD_ID__: JSON.stringify(buildId),
+    __APP_VERSION__: JSON.stringify(appVersion),
   },
 })
